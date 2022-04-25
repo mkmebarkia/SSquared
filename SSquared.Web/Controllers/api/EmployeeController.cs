@@ -4,7 +4,7 @@ using SSquared.Core.Models;
 using SSquared.Core.Services.Interfaces;
 using SSquared.Web.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 
 namespace SSquared.Web.Controllers.api
 {
