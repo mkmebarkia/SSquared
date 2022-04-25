@@ -1,0 +1,110 @@
+﻿@using AutoMapper
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+@using SSquared.Core.Models
+@using SSquared.Core.Services.Interfaces
+@using Microsoft.AspNetCore.Components.Web
+@using SSquared.Web.Models
+
+@inject IEmployeeService EmployeeService
+@inject IMapper Mapper;
+@inject IJSRuntime JsRuntime;
+
+<EditForm Model="@_employeeViewModel" OnValidSubmit="@Save">
+      
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label  text-start">Manager</label>
+        <div class="col-sm-9">
+            <select @onchange="SelectManagerChanged" class="form-select" required>
+                <option value="" selected>Select Manager</option>
+                @foreach (var employee in _managerViewModels)
+                {
+                    <option value="@employee.EmployeeID"> @employee.LastName @employee.FirstName</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="lastname" class="col-sm-3 col-form-label text-start">Last Name</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="lastname" @bind="@_employeeViewModel.LastName" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="firstname" class="col-sm-3 col-form-label text-start">First Name</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="firstname" @bind="@_employeeViewModel.FirstName" required>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label text-start tooltip-test"   >Roles</label>
+        <div class="col-sm-9">
+            <select class="form-select" multiple aria-label="multiple select example" @onchange="SelectRoleChanged" title="Hold the Ctrl key and click on each item to select multiple items simultaneously">
+                @foreach (var role in _roleViewModels)
+                {
+                    <option value="@role.RoleID">@role.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" onclick=""   >Save changes</button>
+    </div>
+</EditForm>
+
+
+
+
+@code {
+    [Parameter] public EventCallback<string> EmployedAdd { get; set; }
+    private List<EmployeeViewModel> _managerViewModels;
+    private List<RoleViewModel> _roleViewModels;
+    private EmployeeViewModel _employeeViewModel;
+    private string[]? employeeRoles { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get all managers
+        var managers = EmployeeService.GetAllManagers();
+        _managerViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(managers).ToList();
+
+        var allRoles = EmployeeService.GetAllRoles();
+        _roleViewModels = Mapper.Map<IEnumerable<Role>, IEnumerable<RoleViewModel>>(allRoles).ToList();
+
+        _employeeViewModel = new EmployeeViewModel();
+    }
+
+    private void Save()
+    {
+
+        var newEmployee = Mapper.Map<EmployeeViewModel, Employee>(_employeeViewModel);
+
+        EmployeeService.AddEmployee(newEmployee, employeeRoles);
+        _employeeViewModel = new EmployeeViewModel();
+
+        EmployedAdd.InvokeAsync("Employee added");
+        JsRuntime.InvokeVoidAsync("closeModal");
+    }
+
+    private void SelectRoleChanged(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            employeeRoles = (string[])e.Value;
+        }
+    }
+
+    private void SelectManagerChanged(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            _employeeViewModel.ManagerID = Convert.ToInt32(e.Value);
+        }
+    }
+
+}

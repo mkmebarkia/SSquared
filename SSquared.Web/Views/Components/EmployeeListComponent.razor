@@ -1,0 +1,116 @@
+﻿@using AutoMapper
+@using SSquared.Core.Models
+@using SSquared.Core.Services.Interfaces
+@using Microsoft.AspNetCore.Components.Web
+@using SSquared.Web.Models
+
+@inject IEmployeeService EmployeeService
+@inject IMapper Mapper;
+
+<div id="EmployeeAddedAlert"></div>
+
+<div class="row">
+    <div class="highlight">
+        <div class="row align-middle">
+            <div class="col-5">
+                <select @onchange="FilterManagerChanged" class="form-select">
+                    <option value="0" selected>Select Manager</option>
+                    @foreach (var employee in managerViewModels)
+                    {
+                        <option value="@employee.EmployeeID"> @employee.LastName @employee.FirstName</option>
+                    }
+                </select>
+            </div>
+            <div class="col text-end">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#employeeModal">Add Employee</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="bd-example">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Employee ID</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col" class="text-start">Roles</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in employeeViewModels)
+                {
+                    <tr>
+                        <th scope="row">@employee.EmployeeID</th>
+                        <td>@employee.LastName</td>
+                        <td>@employee.FirstName</td>
+                        <td class="text-start">
+                            @foreach (var role in employee.Roles)
+                            {
+                                <span class="badge bg-secondary m-1 ">@role.Name</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="newEmployeeModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="employeeModalLabel">New employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <NewEmployeeComponent EmployedAdd="EmployedAdd"></NewEmployeeComponent>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+@code {
+
+    private List<EmployeeViewModel> employeeViewModels;
+    private List<RoleViewModel> roleViewModels;
+    private EmployeeViewModel employeeViewModel;
+    private List<EmployeeViewModel> managerViewModels { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get all managers
+        var managers = EmployeeService.GetAllManagers();
+        managerViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(managers).ToList();
+
+        // get all employees
+        GetAllEmployeeByManager(0);
+
+    }
+
+    private void FilterManagerChanged(ChangeEventArgs e)
+    {
+        var managerId = Convert.ToInt32(e.Value);
+        GetAllEmployeeByManager(managerId);
+    }
+
+    private void GetAllEmployeeByManager(int managerId)
+    {
+        var listEmployees = EmployeeService.GetAllEmployeeByManager(managerId);
+        employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(listEmployees).ToList();
+    }
+    void EmployedAdd(string newMessage)
+    {
+         GetAllEmployeeByManager(0);
+    }
+
+}
