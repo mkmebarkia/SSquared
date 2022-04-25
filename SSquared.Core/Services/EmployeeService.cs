@@ -20,28 +20,37 @@ namespace SSquared.Core.Services
         public IEnumerable<Employee> GetAllEmployeeByManager(int managerId)
         {
             var allEmployeeByManager = _unitOfWork.Employees.GetAllEmployeeByManager(managerId);
-
             return allEmployeeByManager;
+        }
+
+        public Employee GetAllEmployeeById(int employeeId)
+        {
+            var employee = _unitOfWork.Employees.GetEmployeeWithRoles(employeeId);
+            return employee;
+        }
+
+
+        public IEnumerable<Employee> GetAllEmployees()
+        {
+            var allEmployees = _unitOfWork.Employees.GetAllEmployeesWithRoles();
+            return allEmployees;
         }
 
         public IEnumerable<Employee> GetAllManagers()
         {
-            var allManager = _unitOfWork.Employees.GetAllManager();
-
+            var allManager = _unitOfWork.Employees.GetAllManagers();
             return allManager;
         }
 
         public IEnumerable<Role> GetAllRoles()
         {
             var roles = _unitOfWork.Roles.GetAll();
-
             return roles;
         }
 
         public Role GetRoleById(int roleId)
         {
             var role = _unitOfWork.Roles.GetByIdAsNoTracking(roleId);
-
             return role;
         }
 

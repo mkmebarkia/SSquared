@@ -22,9 +22,10 @@ namespace SSquared.Infrastructure.Data.Ripositories
 
         public Role GetByIdAsNoTracking(int id)
         {
-            return _context.Roles.AsNoTracking().FirstOrDefault(x => x.RoleID == id);
+            return _context.Roles
+                           .AsNoTracking()
+                           .FirstOrDefault(x => x.RoleID == id);
         }
-
   
     }
 }

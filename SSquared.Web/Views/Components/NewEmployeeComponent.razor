@@ -61,7 +61,9 @@
 
 
 @code {
-    [Parameter] public EventCallback<string> EmployedAdd { get; set; }
+    [Parameter] 
+    public EventCallback<string> EmployedAdd { get; set; }
+
     private List<EmployeeViewModel> _managerViewModels;
     private List<RoleViewModel> _roleViewModels;
     private EmployeeViewModel _employeeViewModel;
@@ -73,6 +75,7 @@
         var managers = EmployeeService.GetAllManagers();
         _managerViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(managers).ToList();
 
+        // get all Roles
         var allRoles = EmployeeService.GetAllRoles();
         _roleViewModels = Mapper.Map<IEnumerable<Role>, IEnumerable<RoleViewModel>>(allRoles).ToList();
 

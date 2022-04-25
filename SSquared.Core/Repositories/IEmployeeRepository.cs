@@ -9,9 +9,9 @@ namespace SSquared.Core.Repositories
 {
     public interface IEmployeeRepository : IRepository<Employee>
     {    
-        IEnumerable<Employee> GetAllEmployeeByManager(int EmployeeID);
-
-        IEnumerable<Employee> GetAllManager();
-        
+        IEnumerable<Employee> GetAllEmployeeByManager(int employeeID);
+        IEnumerable<Employee> GetAllManagers();
+        IEnumerable<Employee> GetAllEmployeesWithRoles();
+        Employee GetEmployeeWithRoles(int employeeId);
     }
 }

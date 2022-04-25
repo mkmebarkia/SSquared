@@ -22,10 +22,10 @@ namespace SSquared.Infrastructure.Data.Ripositories
                 .AsNoTracking()
                 .FirstOrDefault(e => e.EmployeeID == managerId);
 
-            return employee?.Reports ?? GetAllEmployeeWithRoles();
+            return employee?.Reports ?? GetAllEmployeesWithRoles();
         }
 
-        private IEnumerable<Employee> GetAllEmployeeWithRoles()
+        public IEnumerable<Employee> GetAllEmployeesWithRoles()
         {
             var employees = SSquaredDbContext.Employees
                                     .AsNoTracking()
@@ -34,21 +34,30 @@ namespace SSquared.Infrastructure.Data.Ripositories
 
         }
 
-        public IEnumerable<Employee> GetAllManager()
+        public Employee GetEmployeeWithRoles(int employeeId)
         {
-    
+            var employee = SSquaredDbContext.Employees
+                                   .Include("Roles")
+                                   .FirstOrDefault(x => x.EmployeeID == employeeId);
+            return employee;
+        }
+
+        public IEnumerable<Employee> GetAllManagers()
+        {
+
             return SSquaredDbContext.Employees
                                     .FromSqlRaw(@"
                                         select * from Employees 
                                         where EmployeeID IN (select ManagerID from Employees)")
                                     .AsNoTracking()
+                                    .Include("Roles")
                                     .ToList();
         }
-        
+
         private SSquaredDbContext SSquaredDbContext
         {
             get { return _context as SSquaredDbContext; }
         }
-        
+
     }
 }

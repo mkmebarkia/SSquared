@@ -69,14 +69,9 @@
             <div class="modal-body">
                 <NewEmployeeComponent EmployedAdd="EmployedAdd"></NewEmployeeComponent>
             </div>
-
         </div>
     </div>
-
-
 </div>
-
-
 
 
 @code {
@@ -93,24 +88,26 @@
         managerViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(managers).ToList();
 
         // get all employees
-        GetAllEmployeeByManager(0);
-
+        var listEmployees = EmployeeService.GetAllEmployees();
+        employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(listEmployees).ToList();
     }
 
     private void FilterManagerChanged(ChangeEventArgs e)
     {
+        if (e.Value == null) return;
         var managerId = Convert.ToInt32(e.Value);
         GetAllEmployeeByManager(managerId);
     }
 
     private void GetAllEmployeeByManager(int managerId)
     {
-        var listEmployees = EmployeeService.GetAllEmployeeByManager(managerId);
-        employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(listEmployees).ToList();
+        var listEmployeesByManager = EmployeeService.GetAllEmployeeByManager(managerId);
+        employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(listEmployeesByManager).ToList();
     }
     void EmployedAdd(string newMessage)
     {
-         GetAllEmployeeByManager(0);
+        var listEmployees = EmployeeService.GetAllEmployees();
+        employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(listEmployees).ToList();
     }
 
 }

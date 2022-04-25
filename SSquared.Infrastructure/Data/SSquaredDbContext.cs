@@ -11,11 +11,9 @@ namespace SSquared.Infrastructure.Data
 {
     public class SSquaredDbContext : DbContext
     {
-
         public SSquaredDbContext(DbContextOptions<SSquaredDbContext> options) : base(options)
         {
         }
-
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Role> Roles { get; set; }
     }

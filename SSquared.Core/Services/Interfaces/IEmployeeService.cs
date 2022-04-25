@@ -14,5 +14,8 @@ namespace SSquared.Core.Services.Interfaces
         IEnumerable<Role> GetAllRoles();
         Role GetRoleById(int roleId);
         void AddEmployee (Employee employee, string[]? employeeRoles);
+        IEnumerable<Employee> GetAllEmployees();
+        Employee GetAllEmployeeById(int employeeId);
+       
     }
 }

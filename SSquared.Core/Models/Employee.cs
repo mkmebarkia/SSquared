@@ -11,13 +11,9 @@ namespace SSquared.Core.Models
         public int EmployeeID { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
-
         public Employee Manager { get; set; }
-
         public int? ManagerID { get; set; }
-
         public List<Employee> Reports { get; set; }
-
         public List<Role> Roles { get; set; }
     }
 }
