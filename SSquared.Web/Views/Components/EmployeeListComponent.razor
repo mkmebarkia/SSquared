@@ -67,7 +67,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <NewEmployeeComponent EmployedAdd="EmployedAdd"></NewEmployeeComponent>
+                <NewEmployeeComponent OnEmployeeAdded="OnEmployeeAdded"></NewEmployeeComponent>
             </div>
         </div>
     </div>
@@ -104,7 +104,7 @@
         var listEmployeesByManager = EmployeeService.GetAllEmployeeByManager(managerId);
         employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(listEmployeesByManager).ToList();
     }
-    void EmployedAdd(string newMessage)
+    void OnEmployeeAdded()
     {
         var listEmployees = EmployeeService.GetAllEmployees();
         employeeViewModels = Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeViewModel>>(listEmployees).ToList();

@@ -23,9 +23,15 @@ namespace SSquared.Core.Services
             return allEmployeeByManager;
         }
 
-        public Employee GetAllEmployeeById(int employeeId)
+        public Employee GetEmployeeById(int employeeId)
         {
             var employee = _unitOfWork.Employees.GetEmployeeWithRoles(employeeId);
+            return employee;
+        }
+
+        public IEnumerable< Employee> GetAlltest()
+        {
+            var employee = _unitOfWork.Employees.GetAll();
             return employee;
         }
 

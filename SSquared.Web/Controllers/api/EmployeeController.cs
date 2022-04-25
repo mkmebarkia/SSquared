@@ -51,7 +51,7 @@ namespace SSquared.Web.Controllers.api
         [HttpGet("{id}")]
         public EmployeeViewModel Get(int id)
         {
-            var employees = _employeeService.GetAllEmployeeById(id);
+            var employees = _employeeService.GetEmployeeById(id);
             var employeeViewModel = _mapper.Map<Employee, EmployeeViewModel>(employees);
             return employeeViewModel;
         }

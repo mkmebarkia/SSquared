@@ -53,7 +53,7 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" onclick=""   >Save changes</button>
+        <button type="submit" class="btn btn-primary" >Save changes</button>
     </div>
 </EditForm>
 
@@ -62,7 +62,7 @@
 
 @code {
     [Parameter] 
-    public EventCallback<string> EmployedAdd { get; set; }
+    public EventCallback OnEmployeeAdded { get; set; }
 
     private List<EmployeeViewModel> _managerViewModels;
     private List<RoleViewModel> _roleViewModels;
@@ -90,7 +90,7 @@
         EmployeeService.AddEmployee(newEmployee, employeeRoles);
         _employeeViewModel = new EmployeeViewModel();
 
-        EmployedAdd.InvokeAsync("Employee added");
+        OnEmployeeAdded.InvokeAsync();
         JsRuntime.InvokeVoidAsync("closeModal");
     }
 
